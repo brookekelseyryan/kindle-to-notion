@@ -153,31 +153,6 @@ export class NotionAdapter {
           },
         };
       }
-      else {
-        let reqUri = "https://www.googleapis.com/books/v1/volumes?q=";
-        reqUri += "intitle:" + page.title;
-        try {
-          const response = await axios.get(reqUri);
-          const items = response.data.items || [];
-      
-          if (items.length > 0) {
-            for (const item of items) {
-              const thumbnail = item.volumeInfo?.imageLinks?.thumbnail;
-              if (thumbnail) {
-                 thumbnail.replace("http://", "https://");
-              }
-            }
-            page["cover"] = {
-              type: "external",
-              external: {
-                url: thumbnail,
-              },
-            };
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
 
       const response = await this.notion.pages.create(page);
       writeToFile(response, "create-page-response.json", "data");
