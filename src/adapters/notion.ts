@@ -155,7 +155,7 @@ export class NotionAdapter {
       }
       else {
         let reqUri = "https://www.googleapis.com/books/v1/volumes?q=";
-        reqUri += "intitle:" + createPageParams.bookName;
+        reqUri += "intitle:" + createPageParams.title;
         try {
           const response = await axios.get(reqUri);
           const items = response.data.items || [];
