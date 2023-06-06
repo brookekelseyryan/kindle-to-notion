@@ -4,8 +4,7 @@ import { writeToFile, readFromFile, formatAuthorName } from "../utils";
 
 export class Parser {
   private fileName = "My Clippings.txt";
-  private regex =
-    /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado|Your Note)(.+)\r*\n\r*\n(.+)/gm;
+  private regex = /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado)(.+)\r*\n\r*\n(.+)|(.+) \((.+)\)\r*\n- Your Note(.+)\r*\n\r*\n(.+)/gm;
   private splitter = /=+\r*\n/gm;
   private nonUtf8 = /\uFEFF/gmu;
   private clippings: Clipping[] = [];
@@ -19,6 +18,7 @@ export class Parser {
       console.log(`📝 Title: ${groupedClipping.title}`);
       console.log(`🙋 Author: ${groupedClipping.author}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
+      console.log(`💯 Notes Count: ${groupedClipping.highlights.length}`)
     }
     console.log("--------------------------------------");
   };
@@ -31,11 +31,19 @@ export class Parser {
   /* Method add the parsed clippings to the clippings array */
   addToClippingsArray = (match: RegExpExecArray | null) => {
     if (match) {
-      const title = match[1];
-      let author = formatAuthorName(match[2]);
-      const highlight = match[4];
+      const title = match[1] || match[6];
+      let author = formatAuthorName(match[2] || match[7]);
+      const highlight = match[3];
+      const note = match[8];
+      const location = match[4] || match[9];
 
-      this.clippings.push({ title, author, highlight });
+      if (highlight) {
+        this.clippings.push({ title, author, highlight, location });
+      }
+
+      if (note) {
+        this.clippings.push({ title, author, note, location });
+      }
     }
   };
 
@@ -48,14 +56,16 @@ export class Parser {
         title,
         author: clippings[0].author,
         highlights: clippings.map((clipping) => clipping.highlight),
+        notes: clippings.map((clipping) => clipping.note)
       }))
       .value();
 
-    // remove duplicates in the highlights for each book
+    // remove duplicates in the highlights and notes for each book
     this.groupedClippings = this.groupedClippings.map((groupedClipping) => {
       return {
         ...groupedClipping,
         highlights: [...new Set(groupedClipping.highlights)],
+        notes: [...new Set(groupedClipping.notes)]
       };
     });
   };
