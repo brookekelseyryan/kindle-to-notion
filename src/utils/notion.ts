@@ -35,7 +35,7 @@ export const makeHighlightsBlocks = (
   type: BlockType
 ): Block[] => {
   return [
-    ...makeBlocks([" 🎀 Highlights"], BlockType.heading_1),
+    ...makeBlocks(["Highlights"], BlockType.heading_1),
     ...makeBlocks(highlights, type),
   ];
 };
