@@ -1,8 +1,8 @@
 export interface Clipping {
   title: string;
   author: string;
-  highlight?: string;
-  note?: string;
+  highlight: string;
+  note: string;
 }
 
 export interface GroupedClipping {
