@@ -31,18 +31,17 @@ export class Parser {
   /* Method add the parsed clippings to the clippings array */
   addToClippingsArray = (match: RegExpExecArray | null) => {
     if (match) {
-      const title = match[1] || match[6];
-      let author = formatAuthorName(match[2] || match[7]);
+      const title = match[1] || match[5];
+      let author = formatAuthorName(match[2] || match[6]);
       const highlight = match[3];
-      const note = match[8];
-      const location = match[4] || match[9];
+      const note = match[7];
 
       if (highlight) {
-        this.clippings.push({ title, author, highlight, location });
+        this.clippings.push({ title, author, highlight });
       }
 
       if (note) {
-        this.clippings.push({ title, author, note, location });
+        this.clippings.push({ title, author, note });
       }
     }
   };
