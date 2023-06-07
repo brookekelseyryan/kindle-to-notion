@@ -6,8 +6,6 @@ import _ from "lodash";
 
 
 export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: string, location: string, title: string, clippings: Clipping[]): number => {
-  let mostRecentIndex: number = -1;
-  let mostRecentDate: Date | undefined = undefined;
 
   for (let i = 0; i < clippings.length; i++) {
     const clipping = clippings[i];
@@ -16,7 +14,7 @@ export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: s
     }
   }
 
-  return mostRecentIndex;
+  return -1;
 };
 
 /* Method to return the quote associated with a clipping, if it doesn't exist, return a blank string. */

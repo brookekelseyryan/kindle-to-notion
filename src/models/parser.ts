@@ -42,7 +42,7 @@ export class Parser {
         const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
         const quote = getQuoteIfItExists(this.clippings, i);
         if (i > -1) {
-          let clipping = this.clippings[i];
+          // let clipping = this.clippings[i];
           this.clippings[i] = {title, author, quote, note, location}
         } else {
           this.clippings.push({title, author, quote, note, location})
@@ -53,7 +53,7 @@ export class Parser {
         const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
         const note = getNoteIfItExists(this.clippings, i);
         if (i > -1) {
-          let clipping = this.clippings[i];
+          // let clipping = this.clippings[i];
           this.clippings[i] = {title, author, quote, note, location}
         } else {
           this.clippings.push({title, author, quote, note, location})
@@ -62,16 +62,18 @@ export class Parser {
     }
   };
 
-  extractLocation = (info_line) => {
+  extractLocation = (info_line: string) => {
     // Extracts the last location number from the info line in the clipping
     const loc_reg = new RegExp(this.location_regex.source);
     const match = loc_reg.exec(info_line);
-    const loc = match[1] || match[2];
-    if (loc) {
-      return loc;
-    } else {
-      return '';
-    } 
+    if (match) {
+      const loc = match[1] || match[2];
+      if (loc) {
+        return loc;
+      } 
+    }
+    return '';
+    
   }
 
   /* Method to group clippings (highlights) by the title of the book */
