@@ -19,6 +19,7 @@ export class Parser {
       console.log("--------------------------------------");
       console.log(`📝 Title: ${groupedClipping.title}`);
       console.log(`🙋 Author: ${groupedClipping.author}`);
+      console.log(`📘 Book Cover Url: ${groupedClipping.bookCoverUrl}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
       console.log("🔖 Highlights with Notes:");
       for (const highlight of groupedClipping.highlights) {
@@ -48,7 +49,6 @@ export class Parser {
     const note = match[8];
     const info_line = match[3] || match[7];
     const location = this.extractLocation(info_line);
-  
     const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(author, location, title, this.clippings);
 
     if (note) {

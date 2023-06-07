@@ -3,40 +3,18 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 import { GroupedClipping, Sync, Clipping } from "../interfaces";
 import _ from "lodash";
 
-// export const splitLocation = (location: string): string => {
-
-//   const locarr = location.split("-");
-
-
-// };
-
-// export const locationsMatch = (location1: string, location2: string): boolean => {
-//   const loc1 : string[] = location1.split("-");
-//   const loc2 : string[] = location2.split("-");
-//   const loc1_range : number[] = [];
-//   const loc2_range : number[] = [];
-
-//   for (let i = 0; i < loc1.length; i++)  {
-//     loc1_range.push(parseInt(loc1[i]));
-//   }
-
-//   for (let j = 0; j < loc2.length; j++)  {
-//     loc2_range.push(parseInt(loc2[j]));
-//   }
-
-
-
-//   for (let i = 0; i < loc1.length; i++) {
-//     for (let j = 0; j < loc2.length; j++) {
-//       if (loc1[i] === loc2[j]) {
-//         return true; // If any element in loc1 matches an element in loc2, return true
-//       }
-//     }
-//   }
-
-//   return false; // No matching elements found, return false
-
-// };
+/* Method to print the stats of Clippings read from My Clippings.txt */
+export const printStats = (groupedClippings: GroupedClipping[]) => {
+  console.log("\n💹 Stats for Clippings");
+  for (const groupedClipping of groupedClippings) {
+      console.log("--------------------------------------");
+      console.log(`📝 Title: ${groupedClipping.title}`);
+      console.log(`🙋 Author: ${groupedClipping.author}`);
+      console.log(`📘 Book Cover Url: ${groupedClipping.bookCoverUrl}`);
+      console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
+  }
+  console.log("--------------------------------------");
+};
 
 /* The Locations property is a range, it may either have 1 or 2 numbers in that range */
 export const locationsMatch = (location1: string, location2: string): boolean => {
@@ -73,12 +51,6 @@ export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: s
 
   for (let i = 0; i < clippings.length; i++) {
     const clipping = clippings[i];
-    // console.log("clipping.title:" + clipping.title);
-    // console.log("title:" + title);
-    // console.log("clipping.author:" + clipping.author);
-    // console.log("author:" + author);
-    // console.log("clipping.location:" + clipping.location);
-    // console.log("location:" + location);
     if (clipping.author === author && clipping.title === title && locationsMatch(clipping.location, location)) {
       return i;
     }
@@ -116,27 +88,6 @@ export const getNoteIfItExists = (clippings: Clipping[], index: number): string 
     return n;
   }
 };
-
-// export const getMostRecentlyAddedClippingByTitleAuthorLocation = (title: string, author: string, location: string, clippings: Clipping[]): Clipping | undefined => {
-//   if (clippings.length === 0) {
-//     return undefined; // Return undefined if the array is empty
-//   }
-  
-//   let mostRecentClipping: Clipping | undefined = undefined;
-//   let mostRecentDate: Date | undefined = undefined;
-
-//   for (const clipping of clippings) {
-//     if (clipping.author === author && clipping.location === location && clipping.title === title) {
-//       const addedDate = new Date(clipping.addedDate);
-//       if (!mostRecentDate || addedDate > mostRecentDate) {
-//         mostRecentDate = addedDate;
-//         mostRecentClipping = clipping;
-//       }
-//     }
-//   }
-
-//   return mostRecentClipping;
-// }
 
 /* Function to write to a file given the file, fileName and optionally the dirName */
 export const writeToFile = (

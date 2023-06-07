@@ -15,6 +15,7 @@ export interface Clipping {
 export interface GroupedClipping {
   title: string;
   author: string;
+  bookCoverUrl?: string;
   highlights: Highlight[];
 }
 

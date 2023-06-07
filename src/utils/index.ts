@@ -5,6 +5,7 @@ export {
   getUnsyncedHighlights,
   formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, 
   getQuoteIfItExists, 
-  getNoteIfItExists
+  getNoteIfItExists,
+  printStats
 } from "./common";
 export { makeBlocks, makeHighlightsBlocks, makePageProperties } from "./notion";
