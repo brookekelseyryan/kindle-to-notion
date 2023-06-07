@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Highlight, Clipping, GroupedClipping } from "../interfaces";
+import { Clipping, GroupedClipping } from "../interfaces";
 import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, getQuoteIfItExists, getNoteIfItExists } from "../utils";
 
 export class Parser {

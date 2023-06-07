@@ -3,6 +3,8 @@ export {
   readFromFile,
   updateSync,
   getUnsyncedHighlights,
-  formatAuthorName,
+  formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, 
+  getQuoteIfItExists, 
+  getNoteIfItExists
 } from "./common";
 export { makeBlocks, makeHighlightsBlocks, makePageProperties } from "./notion";
