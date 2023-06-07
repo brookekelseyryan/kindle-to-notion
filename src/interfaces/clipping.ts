@@ -15,7 +15,7 @@ export interface Clipping {
 export interface GroupedClipping {
   title: string;
   author: string;
-  highlights: Highlights[];
+  highlights: Highlight[];
 }
 
 export interface Sync {
