@@ -17,7 +17,7 @@ export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: s
   }
 
   return mostRecentIndex;
-}
+};
 
 /* Method to return the quote associated with a clipping, if it doesn't exist, return a blank string. */
 export const getQuoteIfItExists = (clippings: Clipping[], index: number): string => {
@@ -32,7 +32,7 @@ export const getQuoteIfItExists = (clippings: Clipping[], index: number): string
   else {
     return q;
   }
-}
+};
 
 /* Method to return the note associated with a clipping, if it doesn't exist, return a blank string. */
 export const getNoteIfItExists = (clippings: Clipping[], index: string): string => {
@@ -47,7 +47,7 @@ export const getNoteIfItExists = (clippings: Clipping[], index: string): string 
   else {
     return n;
   }
-}
+};
 
 // export const getMostRecentlyAddedClippingByTitleAuthorLocation = (title: string, author: string, location: string, clippings: Clipping[]): Clipping | undefined => {
 //   if (clippings.length === 0) {
