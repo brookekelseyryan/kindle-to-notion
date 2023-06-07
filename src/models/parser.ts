@@ -1,10 +1,11 @@
 import _ from "lodash";
-import { Clipping, GroupedClipping } from "../interfaces";
-import { writeToFile, readFromFile, formatAuthorName } from "../utils";
+import { Highlight, Clipping, GroupedClipping } from "../interfaces";
+import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, extractLocation, getQuoteIfItExists, getNoteIfItExists } from "../utils";
 
 export class Parser {
   private fileName = "My Clippings.txt";
   private regex = /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado)(.+)\r*\n\r*\n(.+)|(.+) \((.+)\)\r*\n- Your Note(.+)\r*\n\r*\n(.+)/gm;
+  private location_regex = /Location\s+(\d+)(?:-(\d+))?/gm;
   private splitter = /=+\r*\n/gm;
   private nonUtf8 = /\uFEFF/gmu;
   private clippings: Clipping[] = [];
@@ -18,7 +19,6 @@ export class Parser {
       console.log(`📝 Title: ${groupedClipping.title}`);
       console.log(`🙋 Author: ${groupedClipping.author}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
-      console.log(`💯 Notes Count: ${groupedClipping.highlights.length}`)
     }
     console.log("--------------------------------------");
   };
@@ -33,41 +33,107 @@ export class Parser {
     if (match) {
       const title = match[1] || match[5];
       let author = formatAuthorName(match[2] || match[6]);
-      const highlight = match[3];
+      const quote = match[3];
       const note = match[7];
-
-      if (highlight) {
-        this.clippings.push({ title, author, highlight });
-      }
+      const info_line = match[1] || match[2]
+      const location = extractLocation(this.location_regex, info_line);
 
       if (note) {
-        this.clippings.push({ title, author, note });
+        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
+        const quote = getQuoteIfItExists(this.clippings, i);
+        if (i > -1) {
+          let clipping = this.clippings[i];
+          this.clippings[i] = {title, author, quote, note, location}
+        } else {
+          this.clippings.push({title, author, quote, note, location})
+        }
+      }
+
+      if (quote) {
+        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
+        const note = getNoteIfItExists(this.clippings, i);
+        if (i > -1) {
+          let clipping = this.clippings[i];
+          this.clippings[i] = {title, author, quote, note, location}
+        } else {
+          this.clippings.push({title, author, quote, note, location})
+        }
       }
     }
   };
 
   /* Method to group clippings (highlights) by the title of the book */
-  groupClippings = () => {
+  // groupClippings = () => {
+  //   console.log("\n➕ Grouping Clippings");
+  //   this.groupedClippings = _.chain(this.clippings)
+  //     .groupBy("title")
+  //     .map((clippings, title) => ({
+  //       title,
+  //       author: clippings[0].author,
+  //       highlights: clippings.map((clipping) => clipping.highlight)
+  //     }))
+  //     .value();
+
+  //   // remove duplicates in the highlights and notes for each book
+  //   this.groupedClippings = this.groupedClippings.map((groupedClipping) => {
+  //     return {
+  //       ...groupedClipping,
+  //       highlights: [...new Set(groupedClipping.highlights)]
+  //     };
+  //   });
+  // };
+
+  groupClippings = (): void => {
     console.log("\n➕ Grouping Clippings");
+  
     this.groupedClippings = _.chain(this.clippings)
       .groupBy("title")
       .map((clippings, title) => ({
         title,
         author: clippings[0].author,
-        highlights: clippings.map((clipping) => clipping.highlight),
-        notes: clippings.map((clipping) => clipping.note)
+        highlights: clippings.map((clipping) => ({
+          quote: clipping.highlight,
+          note: clipping.note,
+          location: clipping.location,
+        })),
       }))
       .value();
 
-    // remove duplicates in the highlights and notes for each book
-    this.groupedClippings = this.groupedClippings.map((groupedClipping) => {
-      return {
-        ...groupedClipping,
-        highlights: [...new Set(groupedClipping.highlights)],
-        notes: [...new Set(groupedClipping.notes)]
-      };
-    });
+      console.log("Grouped Clippings:");
+      console.log(this.groupedClippings);
+  
+    // Remove duplicates in the highlights and notes for each book
+    // this.groupedClippings = this.groupedClippings.map((groupedClipping) => ({
+    //   ...groupedClipping,
+    //   clippings: groupedClipping.clippings.filter((clipping, index, self) => {
+    //     const firstIndex = self.findIndex((c) => c.highlight === clipping.highlight && c.note === clipping.note);
+    //     return index === firstIndex;
+    //   }),
+    // }));
   };
+
+
+
+  // /* Method to find the clipping with the highest index that matches these criteria. Used for adding corresponding highlight */
+  // getClippingByAuthorLocationTitle(author: string, location: string, title: string, clippings): Clipping | undefined {
+  //   let matchingClipping: Clipping | undefined = undefined;
+  //   for (let i = this.clippings.length - 1; i >= 0; i--) {
+  //     const clipping = this.clippings[i];
+  //     if (clipping.author === author && clipping.location === location && clipping.title === title) {
+  //       matchingClipping = clipping;
+  //       break;
+  //     }
+  //   }
+  //   return matchingClipping;
+  //   // return clippings.find(clipping => clipping.author === author && clipping.location === location && clipping.title === title);
+  // }
+
+  // updateClipping(title, author, quote, note, location, clippings): void {
+  //   const index = clippings.findIndex(clipping => clipping.author === author && clipping.location === location && clipping.title === title && clipping.quote === quote);
+  //   if (index !== -1) {
+  //     this.clippings[index] = {title, author, quote, note, location};
+  //   }
+  // }
 
   /* Method to parse clippings (highlights) and add them to the clippings array */
   parseClippings = () => {

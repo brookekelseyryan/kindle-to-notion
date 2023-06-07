@@ -1,15 +1,21 @@
+export interface Highlight {
+  quote: string;
+  note: string;
+  location: string;
+}
+
 export interface Clipping {
   title: string;
   author: string;
-  highlight?: string;
-  note?: string;
+  quote: string;
+  note: string;
+  location: string;
 }
 
 export interface GroupedClipping {
   title: string;
   author: string;
-  highlights: string[];
-  notes: string[];
+  highlights: Highlights[];
 }
 
 export interface Sync {
