@@ -13,17 +13,6 @@ export class Parser {
   private groupedClippings: GroupedClipping[] = [];
 
   /* Method to print the stats of Clippings read from My Clippings.txt */
-  // printStats = () => {
-  //   console.log("\n💹 Stats for Clippings");
-  //   for (const groupedClipping of this.groupedClippings) {
-  //     console.log("--------------------------------------");
-  //     console.log(`📝 Title: ${groupedClipping.title}`);
-  //     console.log(`🙋 Author: ${groupedClipping.author}`);
-  //     console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
-  //     console.log(groupedClipping.highlights);
-  //   }
-  //   console.log("--------------------------------------");
-  // };
   printStats = () => {
     console.log("\n💹 Stats for Clippings");
     for (const groupedClipping of this.groupedClippings) {
@@ -113,9 +102,7 @@ export class Parser {
         return loc3;
       }
     }
-
     return '';
-    
   }
 
   groupClippings = (): void => {
