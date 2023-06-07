@@ -33,7 +33,7 @@ export const getQuoteIfItExists = (clippings: Clipping[], index: number): string
 };
 
 /* Method to return the note associated with a clipping, if it doesn't exist, return a blank string. */
-export const getNoteIfItExists = (clippings: Clipping[], index: string): string => {
+export const getNoteIfItExists = (clippings: Clipping[], index: number): string => {
   if (index === -1) {
     return '';
   }
