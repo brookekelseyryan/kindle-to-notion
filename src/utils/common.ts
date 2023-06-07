@@ -3,13 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 import { GroupedClipping, Sync, Clipping } from "../interfaces";
 import _ from "lodash";
 
-export const extractLocation = (location_regex, info_line) => {
-  // Extracts the last location number from the info line in the clipping
-  const loc_reg = new RegExp(location_regex.source);
-  const match = loc_reg.exec(info_line);
-  const loc = match[1] || match[2];
-  return loc;
-}
+
 
 export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: string, location: string, title: string, clippings: Clipping[]): number => {
   let mostRecentIndex: number = -1;
@@ -18,11 +12,7 @@ export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: s
   for (let i = 0; i < clippings.length; i++) {
     const clipping = clippings[i];
     if (clipping.author === author && clipping.location === location && clipping.title === title) {
-      const addedDate = new Date(clipping.addedDate);
-      if (!mostRecentDate || addedDate > mostRecentDate) {
-        mostRecentDate = addedDate;
-        mostRecentIndex = i;
-      }
+      return i;
     }
   }
 
@@ -59,26 +49,26 @@ export const getNoteIfItExists = (clippings: Clipping[], index: string): string 
   }
 }
 
-export const getMostRecentlyAddedClippingByTitleAuthorLocation = (title: string, author: string, location: string, clippings: Clipping[]): Clipping | undefined => {
-  if (clippings.length === 0) {
-    return undefined; // Return undefined if the array is empty
-  }
+// export const getMostRecentlyAddedClippingByTitleAuthorLocation = (title: string, author: string, location: string, clippings: Clipping[]): Clipping | undefined => {
+//   if (clippings.length === 0) {
+//     return undefined; // Return undefined if the array is empty
+//   }
   
-  let mostRecentClipping: Clipping | undefined = undefined;
-  let mostRecentDate: Date | undefined = undefined;
+//   let mostRecentClipping: Clipping | undefined = undefined;
+//   let mostRecentDate: Date | undefined = undefined;
 
-  for (const clipping of clippings) {
-    if (clipping.author === author && clipping.location === location && clipping.title === title) {
-      const addedDate = new Date(clipping.addedDate);
-      if (!mostRecentDate || addedDate > mostRecentDate) {
-        mostRecentDate = addedDate;
-        mostRecentClipping = clipping;
-      }
-    }
-  }
+//   for (const clipping of clippings) {
+//     if (clipping.author === author && clipping.location === location && clipping.title === title) {
+//       const addedDate = new Date(clipping.addedDate);
+//       if (!mostRecentDate || addedDate > mostRecentDate) {
+//         mostRecentDate = addedDate;
+//         mostRecentClipping = clipping;
+//       }
+//     }
+//   }
 
-  return mostRecentClipping;
-}
+//   return mostRecentClipping;
+// }
 
 /* Function to write to a file given the file, fileName and optionally the dirName */
 export const writeToFile = (

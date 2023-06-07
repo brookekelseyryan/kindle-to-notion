@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Highlight, Clipping, GroupedClipping } from "../interfaces";
-import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, extractLocation, getQuoteIfItExists, getNoteIfItExists } from "../utils";
+import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, getQuoteIfItExists, getNoteIfItExists } from "../utils";
 
 export class Parser {
   private fileName = "My Clippings.txt";
@@ -35,8 +35,8 @@ export class Parser {
       let author = formatAuthorName(match[2] || match[6]);
       const quote = match[3];
       const note = match[7];
-      const info_line = match[1] || match[2]
-      const location = extractLocation(this.location_regex, info_line);
+      const info_line = match[1] || match[2];
+      const location = this.extractLocation(info_line);
 
       if (note) {
         const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
@@ -61,6 +61,18 @@ export class Parser {
       }
     }
   };
+
+  extractLocation = (info_line) => {
+    // Extracts the last location number from the info line in the clipping
+    const loc_reg = new RegExp(this.location_regex.source);
+    const match = loc_reg.exec(info_line);
+    const loc = match[1] || match[2];
+    if (loc) {
+      return loc;
+    } else {
+      return '';
+    } 
+  }
 
   /* Method to group clippings (highlights) by the title of the book */
   // groupClippings = () => {
@@ -92,7 +104,7 @@ export class Parser {
         title,
         author: clippings[0].author,
         highlights: clippings.map((clipping) => ({
-          quote: clipping.highlight,
+          quote: clipping.quote,
           note: clipping.note,
           location: clipping.location,
         })),
