@@ -3,13 +3,83 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 import { GroupedClipping, Sync, Clipping } from "../interfaces";
 import _ from "lodash";
 
+// export const splitLocation = (location: string): string => {
+
+//   const locarr = location.split("-");
+
+
+// };
+
+// export const locationsMatch = (location1: string, location2: string): boolean => {
+//   const loc1 : string[] = location1.split("-");
+//   const loc2 : string[] = location2.split("-");
+//   const loc1_range : number[] = [];
+//   const loc2_range : number[] = [];
+
+//   for (let i = 0; i < loc1.length; i++)  {
+//     loc1_range.push(parseInt(loc1[i]));
+//   }
+
+//   for (let j = 0; j < loc2.length; j++)  {
+//     loc2_range.push(parseInt(loc2[j]));
+//   }
+
+
+
+//   for (let i = 0; i < loc1.length; i++) {
+//     for (let j = 0; j < loc2.length; j++) {
+//       if (loc1[i] === loc2[j]) {
+//         return true; // If any element in loc1 matches an element in loc2, return true
+//       }
+//     }
+//   }
+
+//   return false; // No matching elements found, return false
+
+// };
+
+/* The Locations property is a range, it may either have 1 or 2 numbers in that range */
+export const locationsMatch = (location1: string, location2: string): boolean => {
+  const loc1: string[] = location1.split("-");
+  const loc2: string[] = location2.split("-");
+  const loc1_range: number[] = loc1.map((value) => parseInt(value));
+  const loc2_range: number[] = loc2.map((value) => parseInt(value));
+
+  if (loc1_range.length === 1 && loc2_range.length === 1) {
+    return loc1_range[0] === loc2_range[0];
+  }
+
+  if (loc1_range.length === 2 && loc2_range.length === 1) {
+    const [min, max] = loc1_range;
+    return loc2_range[0] >= min && loc2_range[0] <= max;
+  }
+
+  if (loc1_range.length === 1 && loc2_range.length === 2) {
+    const [min, max] = loc2_range;
+    return loc1_range[0] >= min && loc1_range[0] <= max;
+  }
+
+  if (loc1_range.length === 2 && loc2_range.length === 2) {
+    const [min1, max1] = loc1_range;
+    const [min2, max2] = loc2_range;
+    return (min1 >= min2 && min1 <= max2) || (max1 >= min2 && max1 <= max2);
+  }
+
+  return false;
+};
 
 
 export const getIndexMostRecentlyAddedClippingByAuthorLocationTitle = (author: string, location: string, title: string, clippings: Clipping[]): number => {
 
   for (let i = 0; i < clippings.length; i++) {
     const clipping = clippings[i];
-    if (clipping.author === author && clipping.location === location && clipping.title === title) {
+    // console.log("clipping.title:" + clipping.title);
+    // console.log("title:" + title);
+    // console.log("clipping.author:" + clipping.author);
+    // console.log("author:" + author);
+    // console.log("clipping.location:" + clipping.location);
+    // console.log("location:" + location);
+    if (clipping.author === author && clipping.title === title && locationsMatch(clipping.location, location)) {
       return i;
     }
   }

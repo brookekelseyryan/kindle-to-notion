@@ -5,13 +5,27 @@ import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedC
 export class Parser {
   private fileName = "My Clippings.txt";
   private regex = /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado)(.+)\r*\n\r*\n(.+)|(.+) \((.+)\)\r*\n- Your Note(.+)\r*\n\r*\n(.+)/gm;
-  private location_regex = /Location\s+(\d+)(?:-(\d+))?/gm;
+  // private location_regex = /Location\s+(\d+)(?:-(\d+))?/gm; // gets the single or last number if range
+  private location_regex = /Location\s+(\d+)(?:-(\d+))?/gm; //gets both numbers 
+  private page_regex = /page\s+(\d+)(?:-(\d+))?/gm;
+  // private location_regex = /Location\s+(\d+)(?:-(\d+))?|page\s+(\d+)(?:-(\d+))?/gm; //gets both numbers in location or page 
   private splitter = /=+\r*\n/gm;
   private nonUtf8 = /\uFEFF/gmu;
   private clippings: Clipping[] = [];
   private groupedClippings: GroupedClipping[] = [];
 
   /* Method to print the stats of Clippings read from My Clippings.txt */
+  // printStats = () => {
+  //   console.log("\n💹 Stats for Clippings");
+  //   for (const groupedClipping of this.groupedClippings) {
+  //     console.log("--------------------------------------");
+  //     console.log(`📝 Title: ${groupedClipping.title}`);
+  //     console.log(`🙋 Author: ${groupedClipping.author}`);
+  //     console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
+  //     console.log(groupedClipping.highlights);
+  //   }
+  //   console.log("--------------------------------------");
+  // };
   printStats = () => {
     console.log("\n💹 Stats for Clippings");
     for (const groupedClipping of this.groupedClippings) {
@@ -19,6 +33,15 @@ export class Parser {
       console.log(`📝 Title: ${groupedClipping.title}`);
       console.log(`🙋 Author: ${groupedClipping.author}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
+      console.log("🔖 Highlights with Notes:");
+      for (const highlight of groupedClipping.highlights) {
+        if (highlight.note !== "") {
+          console.log(`  Quote: ${highlight.quote}`);
+          console.log(`  Note: ${highlight.note}`);
+          console.log(`  Location: ${highlight.location}`);
+          console.log("--------------------------------------");
+        }
+      }
     }
     console.log("--------------------------------------");
   };
@@ -33,15 +56,24 @@ export class Parser {
     if (match) {
       const title = match[1] || match[5];
       let author = formatAuthorName(match[2] || match[6]);
-      const quote = match[3];
-      const note = match[7];
-      const info_line = match[1] || match[2];
+      const quote = match[4];
+      const note = match[8];
+      const info_line = match[3] || match[7];
       const location = this.extractLocation(info_line);
+      // console.log("----------------");
+      // console.log();
+      // console.log("title:" + title);
+      // console.log("author:" + author);
+      // console.log("info_line:" + info_line);
+      // console.log("location:" + location);
 
       if (note) {
-        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
+        // console.log("note:" + note);
+        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(author, location, title, this.clippings);
+        // console.log("i:" + i);
         const quote = getQuoteIfItExists(this.clippings, i);
-        if (i > -1) {
+        // console.log("quote:" + quote);
+        if (i > -1 && quote !== "") {
           // let clipping = this.clippings[i];
           this.clippings[i] = {title, author, quote, note, location}
         } else {
@@ -50,9 +82,11 @@ export class Parser {
       }
 
       if (quote) {
-        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(title, author, location, this.clippings);
+        // console.log("quote:" + quote);
+        const i = getIndexMostRecentlyAddedClippingByAuthorLocationTitle(author, location, title, this.clippings);
         const note = getNoteIfItExists(this.clippings, i);
-        if (i > -1) {
+        // console.log("note:" + note);
+        if (i > -1 && note !== "") {
           // let clipping = this.clippings[i];
           this.clippings[i] = {title, author, quote, note, location}
         } else {
@@ -60,18 +94,41 @@ export class Parser {
         }
       }
     }
+    // console.log("----------------");
+    // console.log();
   };
 
   extractLocation = (info_line: string) => {
-    // Extracts the last location number from the info line in the clipping
+    // Extracts a single number or a range for the location. 
     const loc_reg = new RegExp(this.location_regex.source);
     const match = loc_reg.exec(info_line);
     if (match) {
-      const loc = match[1] || match[2];
-      if (loc) {
-        return loc;
+      const loc1 = match[1];
+      const loc2 = match[2];
+
+      if (loc2) {
+        return loc1 + "-" + loc2;
       } 
+      else if (loc1) {
+        return loc1;
+      }
+    } 
+    // next, try extracting the page number if we couldn't find any location range 
+    const page_reg = new RegExp(this.page_regex.source);
+    const page_match = page_reg.exec(info_line);
+
+    if (page_match) {
+      const loc3 = page_match[1];
+      const loc4 = page_match[2];
+      
+      if (loc4) {
+        return loc3 + "-" + loc4;
+      } 
+      else if (loc3) {
+        return loc3;
+      }
     }
+
     return '';
     
   }
