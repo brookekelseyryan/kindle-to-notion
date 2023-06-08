@@ -18,12 +18,8 @@ import { Block, CreatePageParams } from "../interfaces";
 export class NotionAdapter {
   private notion: Client;
 
-  // constructor() {
-  //   this.notion = new Client({ auth: process.env.NOTION_API_KEY });
-  // }
-
   constructor() {
-    this.notion = new Client({ auth: "secret_hjumxkJDrIwUoAfbv6jtVEtviySNjlgRLIRPDhfiqjo" });
+    this.notion = new Client({ auth: process.env.NOTION_API_KEY });
   }
 
   /* Method to get a Notion database */

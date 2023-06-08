@@ -13,8 +13,7 @@ import {
 async function createNewbookHighlights(title: string, author: string, bookUrl: string | undefined, highlights: Highlight[],  totalHighlights : number , notionInstance: NotionAdapter) {
     if (bookUrl && bookUrl !== "") {
         const createPageParams: CreatePageParams = {
-            // parentDatabaseId: process.env.BOOK_DB_ID as string,
-            parentDatabaseId: "fb0edc221b2c40bf9cf634bffaec168c",
+            parentDatabaseId: process.env.BOOK_DB_ID as string,
             properties: {
                 title: title,
                 author: author,
@@ -27,8 +26,7 @@ async function createNewbookHighlights(title: string, author: string, bookUrl: s
         await notionInstance.createPage(createPageParams);
     } else {
         const createPageParams: CreatePageParams = {
-            //parentDatabaseId: process.env.BOOK_DB_ID as string,
-            parentDatabaseId: "fb0edc221b2c40bf9cf634bffaec168c",
+            parentDatabaseId: process.env.BOOK_DB_ID as string,
             properties: {
                 title: title,
                 author: author,
@@ -52,8 +50,7 @@ export class Notion {
   /* Method to get Notion block id of the Notion page given the book name */
   getIdFromBookName = async (bookName: string) => {
     const response = await this.notion.queryDatabase({
-      //database_id: process.env.BOOK_DB_ID as string,
-      database_id: "fb0edc221b2c40bf9cf634bffaec168c",
+      database_id: process.env.BOOK_DB_ID as string,
       filter: {
         or: [
           {
