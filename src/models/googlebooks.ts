@@ -55,7 +55,7 @@ export class GoogleBooks {
                 const imgUrlBook1 = await this.getQualityImageForItem(bookData, i);
     
                 if (imgUrlBook1) {
-                    console.log(`🔥 Medium/Large URL (i=${i}):`);
+                    console.log(`🔥 High-quality Book Cover Url:`);
                     return imgUrlBook1;
                 }
             }
@@ -63,7 +63,7 @@ export class GoogleBooks {
             // If we can't find any large images after X tries, use the thumbnail image instead. 
             const thumbnail = bookData[0]?.volumeInfo?.imageLinks?.thumbnail;
             if (thumbnail) {
-                console.log("🎞 Thumbnail URL: ");
+                console.log("🎞 Thumbnail-sized Book Cover Url: ");
                 return thumbnail;
             } 
         }
@@ -88,11 +88,12 @@ export class GoogleBooks {
 
     /* Method to add book covers to all books. */
     getBookCovers = async (books: GroupedClipping[]): Promise<GroupedClipping[]> => {
+        console.log("\n📘 Using Google Books to find book covers");
         const updatedBooks: GroupedClipping[] = [];
       
         for (const book of books) {
           const { title, author, highlights } = book;
-          console.log("---------------------");
+          console.log("--------------------------------------");
           console.log("📝 Title: " + title);
           console.log("🙋 Author: " + author);
           let bookCoverUrl = await this.getBookCoverUrl(title, undefined);
@@ -106,7 +107,7 @@ export class GoogleBooks {
           };
           updatedBooks.push(updatedBook);
         }
-      
+        console.log("\n✅ Successfully retreived book covers");
         return updatedBooks;
     };
 

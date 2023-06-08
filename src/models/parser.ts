@@ -19,7 +19,6 @@ export class Parser {
       console.log("--------------------------------------");
       console.log(`📝 Title: ${groupedClipping.title}`);
       console.log(`🙋 Author: ${groupedClipping.author}`);
-      console.log(`📘 Book Cover Url: ${groupedClipping.bookCoverUrl}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
     }
     console.log("--------------------------------------");
