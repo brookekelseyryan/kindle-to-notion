@@ -1,5 +1,5 @@
 import { Parser, Notion } from "./models";
-// import {printStats} from "./utils"
+import {readClippingsFromFile} from "./utils"
 
 const parser = new Parser();
 // const googleBooks = new GoogleBooks();
@@ -10,6 +10,8 @@ const notion = new Notion();
   let clippings = parser.processClippings();
 
   // clippings = await googleBooks.processCovers(clippings);
+  clippings = readClippingsFromFile("grouped-clippings-covers.json", "data")
+
 
   // sync highlights (clippings) to notion
   await notion.syncHighlights(clippings);

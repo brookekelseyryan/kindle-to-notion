@@ -155,7 +155,7 @@ export class NotionAdapter {
         page["cover"] = {
           type: "external",
           external: {
-            url: createPageParams.cover,
+            url: encodeURI(createPageParams.cover),
           },
         };
         page["icon"] = {

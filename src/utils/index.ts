@@ -7,5 +7,6 @@ export {
   getQuoteIfItExists, 
   getNoteIfItExists,
   printStats,
+  readClippingsFromFile
 } from "./common";
 export { makeBlocks, makeHighlightsBlocks, makePageProperties } from "./notion";

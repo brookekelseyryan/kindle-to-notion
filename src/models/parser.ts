@@ -104,7 +104,6 @@ export class Parser {
       .map((clippings, title) => ({
         title,
         author: clippings[0].author,
-        bookCoverUrl: `https://books.google.com/books/publisher/content?id=IQjXDQAAQBAJ&printsec=frontcover&img=1&zoom=4&edge=curl&imgtk=AFLRE73cYmND-e80UN7eqi-R34mT8_JJotH5roXNZ9mTN-Bu22nGIRrznblJkDsO2kDHlIxrSFxAnayJo1No96tyXhWL64idSuzbK2zgKU9GiofluxSOw9K5BNdaTnm-B9Qcm0S0eoxh&source=gbs_api`,
         highlights: clippings.map((clipping) => ({
           quote: clipping.quote,
           note: clipping.note,

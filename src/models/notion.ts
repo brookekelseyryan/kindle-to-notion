@@ -22,7 +22,7 @@ async function createNewbookHighlights(title: string, author: string, bookUrl: s
                 highlights: totalHighlights
             },
             children: makeHighlightsBlocks(highlights, BlockType.paragraph, title),
-            cover: bookUrl
+            cover: bookUrl.replace("http://", "https://")
         }
         await notionInstance.createPage(createPageParams);
     } else {

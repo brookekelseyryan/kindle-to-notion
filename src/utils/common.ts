@@ -109,6 +109,31 @@ export const readFromFile = (fileName: string, dirName: string): string => {
   );
 };
 
+export const readClippingsFromFile = (fileName: string, dirName: string): GroupedClipping[] => {
+  try {
+    const data = readFileSync(path.join(path.dirname(__dirname), `../${dirName}/${fileName}`), 'utf8');
+    const jsonData = JSON.parse(data);
+    
+    if (Array.isArray(jsonData)) {
+      // Map the JSON data to the GroupedClipping array structure
+      const clippings: GroupedClipping[] = jsonData.map((item: any) => ({
+        title: item.title,
+        author: item.author,
+        highlights: item.highlights,
+        bookCoverUrl: item.bookCoverUrl
+      }));
+
+      return clippings;
+    } else {
+      console.log('Invalid JSON data. Expected an array.');
+    }
+  } catch (error) {
+    console.error('Error reading JSON file:', error);
+  }
+
+  return [];
+}
+
 /* Function to update the sync cache after every book is successfully synced */
 export const updateSync = (book: GroupedClipping) => {
   const oldSync: Sync[] = JSON.parse(readFromFile("sync.json", "resources"));
