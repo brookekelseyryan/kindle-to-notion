@@ -1,4 +1,4 @@
-# 📘 Kindle to Notion 2.0
+# 📘 Kindle to Notion ~ Pretty Sync 💖
 ### Seamlessly transfer your Kindle highlights to a Notion Database, now in Readwise formatting style & with high-quality book covers!
 _a fork of [kindle-to-notion](https://github.com/arkalim/kindle-to-notion)_
 
@@ -41,7 +41,7 @@ To sync your highlights, just upload the new ```My Clippings.txt``` file into yo
         - name: Sync highlights
           uses: addnab/docker-run-action@v3
           with:
-            image: ghcr.io/brookekelseyryan/kindle-to-notion:master
+            image: ghcr.io/brookekelseyryan/kindle-to-notion-pretty-sync:master
             run: node /code/dist/main.js
             options: |
               -v ${{ github.workspace }}:/code/resources 
