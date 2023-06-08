@@ -11,6 +11,7 @@ import {
  
 /* Creates the page parameters */ 
 async function createNewbookHighlights(title: string, author: string, bookUrl: string | undefined, highlights: Highlight[],  totalHighlights : number , notionInstance: NotionAdapter) {
+    // if we found a Book Cover Url, then that will be used as the Cover image and the page icon 
     if (bookUrl && bookUrl !== "") {
         const createPageParams: CreatePageParams = {
             parentDatabaseId: process.env.BOOK_DB_ID as string,
@@ -24,7 +25,9 @@ async function createNewbookHighlights(title: string, author: string, bookUrl: s
             cover: bookUrl.replace("http://", "https://")
         }
         await notionInstance.createPage(createPageParams);
-    } else {
+    } 
+    // otherwise, use 📘 as page icon 
+    else {    
         const createPageParams: CreatePageParams = {
             parentDatabaseId: process.env.BOOK_DB_ID as string,
             properties: {
