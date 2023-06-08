@@ -1,6 +1,8 @@
 # 📘 Kindle to Notion ~ Pretty Sync 💖
 ### Seamlessly transfer your Kindle highlights to a Notion Database, in Readwise formatting style & with high-quality book covers! 
-_a fork of [kindle-to-notion](https://github.com/arkalim/kindle-to-notion)_
+✨ Kindle Pretty Sync [Notion template](https://brookekelseyryan.notion.site/brookekelseyryan/Kindle-Highlights-0897433cd50649d3a15e4817e486a48b)
+
+🍴 _a fork of [kindle-to-notion](https://github.com/arkalim/kindle-to-notion)_
 
 # 🔁 Usage
 > Before you can run the sync, you need to complete the setup section.
