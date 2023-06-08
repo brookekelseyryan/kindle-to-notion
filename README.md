@@ -7,6 +7,8 @@
 # 🔁 Usage
 > Before you can run the sync, you need to complete the setup section.
 
+First, [create a new GitHub repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository). 
+
 To sync your highlights, just upload the new ```My Clippings.txt``` file into your GitHub repo. It will trigger a GitHub Action to sync the newly added highlights to your Notion books database.
 
 # ⚙️ Setup
