@@ -10,7 +10,6 @@ export class GoogleBooks {
     private getQualityImage = async (ID: string): Promise<string | undefined> => {
       await new Promise((resolve) => setTimeout(resolve, this.TIMEOUT));
       const apiUrl = `https://www.googleapis.com/books/v1/volumes/${ID}?fields=id,volumeInfo(title,imageLinks)`;
-      console.log("volume apiURL: " + apiUrl);
   
       try {
         const response: AxiosResponse = await axios.get(apiUrl);
@@ -47,7 +46,6 @@ export class GoogleBooks {
         if (author) {
             apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}`;
         }
-        console.log("apiURL: " + apiUrl);
 
         const response = await this.getBookData(apiUrl);
         const bookData = response !== null ? response.items : null;

@@ -4,5 +4,6 @@ export {
   BlockType,
   CreatePageParams,
   Emoji,
-  CreatePageProperties,
+  CreatePageProperties, 
+  Paragraph
 } from "./notion";

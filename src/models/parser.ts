@@ -21,15 +21,6 @@ export class Parser {
       console.log(`🙋 Author: ${groupedClipping.author}`);
       console.log(`📘 Book Cover Url: ${groupedClipping.bookCoverUrl}`);
       console.log(`💯 Highlights Count: ${groupedClipping.highlights.length}`);
-      console.log("🔖 Highlights with Notes:");
-      for (const highlight of groupedClipping.highlights) {
-        if (highlight.note !== "") {
-          console.log(`  Quote: ${highlight.quote}`);
-          console.log(`  Note: ${highlight.note}`);
-          console.log(`  Location: ${highlight.location}`);
-          console.log("--------------------------------------");
-        }
-      }
     }
     console.log("--------------------------------------");
   };
@@ -113,6 +104,7 @@ export class Parser {
       .map((clippings, title) => ({
         title,
         author: clippings[0].author,
+        bookCoverUrl: `https://books.google.com/books/publisher/content?id=IQjXDQAAQBAJ&printsec=frontcover&img=1&zoom=4&edge=curl&imgtk=AFLRE73cYmND-e80UN7eqi-R34mT8_JJotH5roXNZ9mTN-Bu22nGIRrznblJkDsO2kDHlIxrSFxAnayJo1No96tyXhWL64idSuzbK2zgKU9GiofluxSOw9K5BNdaTnm-B9Qcm0S0eoxh&source=gbs_api`,
         highlights: clippings.map((clipping) => ({
           quote: clipping.quote,
           note: clipping.note,
@@ -120,9 +112,6 @@ export class Parser {
         })),
       }))
       .value();
-
-      console.log("Grouped Clippings:");
-      console.log(this.groupedClippings);
   };
 
   /* Method to parse clippings (highlights) and add them to the clippings array */

@@ -6,6 +6,6 @@ export {
   formatAuthorName, getIndexMostRecentlyAddedClippingByAuthorLocationTitle, 
   getQuoteIfItExists, 
   getNoteIfItExists,
-  printStats
+  printStats,
 } from "./common";
 export { makeBlocks, makeHighlightsBlocks, makePageProperties } from "./notion";

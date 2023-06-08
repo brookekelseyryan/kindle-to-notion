@@ -1,11 +1,33 @@
-interface Text {
-  text: {
-    type: "text";
-    text: {
-      content: string;
-      link: string | null;
-    };
-  }[];
+export interface Paragraph {
+  rich_text: RichText[];
+}
+
+export interface RichText {
+  type: string;
+  text: TextContent;
+  annotations?: Partial<Annotations>;
+  plain_text?: string;
+  href?: null | string;
+}
+
+interface Annotations {
+  bold: boolean;
+  italic: boolean;
+  strikethrough: boolean;
+  underline: boolean;
+  code: boolean;
+  color: string;
+}
+
+export interface TextContent {
+  content: string;
+  link: string | null;
+}
+
+export interface Block {
+  object: "block";
+  type: BlockType;
+  paragraph?: Paragraph;
 }
 
 export enum BlockType {
@@ -23,20 +45,11 @@ export enum Emoji {
   "📘" = "📘"
 }
 
-export interface Block {
-  object: "block";
-  type: BlockType;
-  quote?: Text;
-  paragraph?: Text;
-  heading_1?: Text;
-  heading_2?: Text;
-  heading_3?: Text;
-}
-
 export interface CreatePageProperties {
   title: string;
   author: string;
   bookName: string;
+  highlights?: number;
 }
 
 export interface CreatePageParams {

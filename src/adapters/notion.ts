@@ -18,8 +18,12 @@ import { Block, CreatePageParams } from "../interfaces";
 export class NotionAdapter {
   private notion: Client;
 
+  // constructor() {
+  //   this.notion = new Client({ auth: process.env.NOTION_API_KEY });
+  // }
+
   constructor() {
-    this.notion = new Client({ auth: process.env.NOTION_API_KEY });
+    this.notion = new Client({ auth: "secret_hjumxkJDrIwUoAfbv6jtVEtviySNjlgRLIRPDhfiqjo" });
   }
 
   /* Method to get a Notion database */
@@ -80,6 +84,8 @@ export class NotionAdapter {
         });
 
         blockChildren = {
+          type: blockChildren.type,
+          block: blockChildren.block,
           object: blockChildren.object,
           next_cursor: remainingBlocks.next_cursor,
           has_more: remainingBlocks.has_more,
@@ -147,6 +153,12 @@ export class NotionAdapter {
 
       if (createPageParams.cover) {
         page["cover"] = {
+          type: "external",
+          external: {
+            url: createPageParams.cover,
+          },
+        };
+        page["icon"] = {
           type: "external",
           external: {
             url: createPageParams.cover,
