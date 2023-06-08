@@ -1,7 +1,6 @@
-# 🚀 Kindle to Notion 
-### Seamlessly transfer your Kindle highlights to a Notion Database!
-
-### [🎬 Video tutorial to setup this app](https://youtu.be/NLgyy-KoiFY)
+# 📘 Kindle to Notion 2.0
+### Seamlessly transfer your Kindle highlights to a Notion Database, now in Readwise formatting style & with high-quality book covers!
+_a fork of [kindle-to-notion](https://github.com/arkalim/kindle-to-notion)_
 
 # 🔁 Usage
 > Before you can run the sync, you need to complete the setup section.
@@ -10,7 +9,7 @@ To sync your highlights, just upload the new ```My Clippings.txt``` file into yo
 
 # ⚙️ Setup
 
-- Duplicate my [Notion books database](https://arkalim.notion.site/Library-c966166d851b4a3588bf33049175dd79) as a template in your Notion account. You don't need to clone the contents of my database. You only need to database table. This will serve as your Notion books database.
+- Duplicate my [Notion books database](https://brookekelseyryan.notion.site/brookekelseyryan/Kindle-Highlights-0897433cd50649d3a15e4817e486a48b) as a template in your Notion account. You don't need to clone the contents of the database. You only need to database table. This will serve as your Notion books database.
 
 - Create a new **internal integration** at https://www.notion.so/my-integrations and copy the **Notion API key**.
 ![](/images/book-highlights-integration.png)
@@ -42,7 +41,7 @@ To sync your highlights, just upload the new ```My Clippings.txt``` file into yo
         - name: Sync highlights
           uses: addnab/docker-run-action@v3
           with:
-            image: ghcr.io/arkalim/kindle-to-notion:master
+            image: ghcr.io/brookekelseyryan/kindle-to-notion:master
             run: node /code/dist/main.js
             options: |
               -v ${{ github.workspace }}:/code/resources 
@@ -69,13 +68,27 @@ To sync your highlights, just upload the new ```My Clippings.txt``` file into yo
 
 - You can now manually trigger the GitHub Action by going to the Actions tab in the GitHub repo. This will sync the highlights for the first time and create a `sync.json` file (cache) in the repository. Afterwards, whenever you want to sync your highlights, just upload the new `My Clippings.txt` file into your GitHub repo. It will automatically trigger the action to sync the newly added highlights.
 
-> For reference on how to setup your repo, take a look at my [Kindle Highlights Repo](https://github.com/arkalim/kindle-highlights) 
+> For reference on how to setup your repo, take a look at @arkalim's [Kindle Highlights Repo](https://github.com/arkalim/kindle-highlights) 
 
 # ❗️For Nerds
+### unique for this fork: 
+- The Google Books API is used to search for a book cover. It searches Google Books for a high-quality (i.e. medium or large size) cover image for the first two entries of the Google Books Search by querying the book title. If no high-quality cover is found, the thumbnail is used. 
+   - In rare instances, where no cover is found, the 📘 Emoji is used as the page icon and no cover is set. 
+- ```Book Name``` is used as the primary key to facilitate upsert operation in **Notion** database. So, this field should be left untouched. However, the other fields like **Title** and **Author** could be modified as per your wish. Additionally, you can also add more fields if you'd like. 
+- The ```Highlights``` field in Notion is currently only set when the page is first made. The number is not updated if additional highlights are appended to the page at a later sync. 
+- Notes taken for a highlight on your Kindle are displayed in the same style as Readwise:
+This is an example highlight (Location 100-102)
+**Note:** This is an example note 
+
+### from original repo: 
 - Every highlight made on Kindle is appended at the end of `My Clippings.txt`
-- ```Book Name``` is used as the primary key to facilitate upsert operation in **Notion** database. So, this field should be left untouched. However, the other fields like **Title**, **Author**, **Date Started**, **Date Finished**, **Satus** and **Genre** could be modified as per your wish.
 - This tool only syncs the new highlights made to each book. If no new highlights have been made, no sync takes place. 
 - The info about the last sync is stored in `sync.json` present in your repository containing `My Clippings.txt`.
 - In case you wish to sync every book all over again, delete the `sync.json` file from the repo and delete all the highlights present in your **Notion**.
 - **GitHub Action** is used for CICD. Whenever a push is made to the master branch, the Docker image is rebuilt and pushed to GitHub container registry.
 - Your GitHub repo containing `My Clippings.txt` runs the GitHub action to sync the highlights to Notion everytime you push a change to it. It can also be triggered manually from the *Actions* tab.
+
+# 🏆 Acknowledgements
+This repository is a fork of GitHub user [@akralim's](https://github.com/arkalim) [kindle-to-notion](https://github.com/arkalim/kindle-to-notion) repository. None of my work would be possible without theirs---they did a wonderful job with the application, it is well-maintained, the code is very clean, and the majority of the code in this fork remains the same as theirs. However, I fell in love with the format of the [Readwise Notion template](https://alvarocc.notion.site/Readwise-1945090e9a0449608dce0d1058580de4). But alas, being a grad student, I didn't want to have to pay for the monthly subscription. 
+
+So, I made this fork of [kindle-to-notion](https://github.com/arkalim/kindle-to-notion) to be in the same style as the Readwise Notion template. This required using a different starting template, and a surprising amount of code change. So, much of the instructions here are the same as in the original [kindle-to-notion](https://github.com/arkalim/kindle-to-notion) repo, with a few updated sections where its relevant.  
