@@ -105,7 +105,7 @@ export class Parser {
         author: clippings[0].author,
         highlights: clippings.map((clipping) => ({
           quote: clipping.quote,
-          note: clipping.note,
+          note: clipping.note.trim(),
           location: clipping.location,
         })),
       }))
