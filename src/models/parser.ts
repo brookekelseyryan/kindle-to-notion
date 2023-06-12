@@ -4,7 +4,7 @@ import { writeToFile, readFromFile, formatAuthorName, getIndexMostRecentlyAddedC
 
 export class Parser {
   private fileName = "My Clippings.txt";
-  private regex = /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado)(.+)\r*\n\r*\n(.+)|(.+) \((.+)\)\r*\n- Your Note(.+)\r*\n\r*\n(.+)/gm;
+  private regex = /(.+) \((.+)\)\r*\n- (?:Your Highlight|La subrayado)(.+)\r*\n\r*\n(.+)|(.+) \((.+)\)\r*\n- Your Note(.+)\r*\n\r*\n([\s\S]+)/gm;
   private location_regex = /Location\s+(\d+)(?:-(\d+))?/gm; //gets both numbers 
   private page_regex = /page\s+(\d+)(?:-(\d+))?/gm;
   private splitter = /=+\r*\n/gm;
